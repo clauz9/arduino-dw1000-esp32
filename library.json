@@ -6,7 +6,7 @@
   "description": "A library that offers functionality to use Decawave's DW1000 chips.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thotro/arduino-dw1000-esp32.git"
+    "url": "https://github.com/t-radomski/arduino-dw1000-esp32.git"
   },
   "exclude": [
     "adapterBoard",
