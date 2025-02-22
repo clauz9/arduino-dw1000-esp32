@@ -67,8 +67,8 @@ public:
 	void generateShortMACFrame(byte frame[], byte sourceShortAddress[], byte destinationShortAddress[]);
 	
 	//the long frame for Ranging init
-	//8 bytes for Destination Address and 2 bytes for Source Address
-	//total of
+	//8 bytes for Destination Address, 8 bytes for the source l ong address, and 2 bytes for Source Short Address
+	//total=23
 	void generateLongMACFrame(byte frame[], byte sourceShortAddress[], byte sourceLongAddress[], byte destinationAddress[]);
 	
 	//in order to decode the frame and save source Address!
