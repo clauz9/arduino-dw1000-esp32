@@ -86,9 +86,9 @@ void DW1000Mac::generateShortMACFrame(byte frame[], byte sourceShortAddress[], b
 }
 
 //the long frame for Ranging init
-//8 bytes for Destination Address and 2 bytes for Source Address
-//total=15
-void DW1000Mac::generateLongMACFrame(byte frame[], byte sourceShortAddress[], byte destinationAddress[]) {
+//8 bytes for Destination Address, 8 bytes for the source l ong address, and 2 bytes for Source Short Address
+//total=23
+void DW1000Mac::generateLongMACFrame(byte frame[], byte sourceShortAddress[], byte sourceLongAddress[], byte destinationAddress[]) {
 	//Frame controle
 	*frame     = FC_1;
 	*(frame+1) = FC_2;
@@ -98,15 +98,20 @@ void DW1000Mac::generateLongMACFrame(byte frame[], byte sourceShortAddress[], by
 	*(frame+3) = 0xCA;
 	*(frame+4) = 0xDE;
 	
-	//destination address (8 bytes) - we need to reverse the byte array
-	byte destinationAddressReverse[8];
-	reverseArray(destinationAddressReverse, destinationAddress, 8);
-	memcpy(frame+5, destinationAddressReverse, 8);
-	
-	//source address (2 bytes)
+	// Destination address (8 bytes) - we need to reverse the byte array
+    	byte destinationAddressReverse[8];
+    	reverseArray(destinationAddressReverse, destinationAddress, 8);
+    	memcpy(frame+5, destinationAddressReverse, 8);
+
+    	// Source long address (8 bytes) - we need to reverse the byte array
+    	byte sourceLongAddressReverse[8];
+    	reverseArray(sourceLongAddressReverse, sourceLongAddress, 8);
+    	memcpy(frame+13, sourceLongAddressReverse, 8);
+
+	// Source short address (2 bytes) - we need to reverse the byte array
 	byte sourceShortAddressReverse[2];
 	reverseArray(sourceShortAddressReverse, sourceShortAddress, 2);
-	memcpy(frame+13, sourceShortAddressReverse, 2);
+	memcpy(frame+21, sourceShortAddressReverse, 2);
 	
 	//we increment seqNumber
 	incrementSeqNumber();
@@ -133,10 +138,17 @@ void DW1000Mac::decodeShortMACFrame(byte frame[], byte address[]) {
 	//memcpy(destinationAddress, frame+5, 2);
 }
 
-void DW1000Mac::decodeLongMACFrame(byte frame[], byte address[]) {
-	byte reverseAddress[2];
-	memcpy(reverseAddress, frame+13, 2);
-	reverseArray(address, reverseAddress, 2);
+void DW1000Mac::decodeLongMACFrame(byte frame[], byte shortAddress[], byte longAddress[]) {
+	// Decode source short address (2 bytes)
+	byte reverseShortAddress[2];
+	memcpy(reverseShortAddress, frame + 21, 2);
+	reverseArray(shortAddress, reverseShortAddress, 2);
+	
+	// Decode source long address (8 bytes)
+	byte reverseLongAddress[8];
+	memcpy(reverseLongAddress, frame + 13, 8);
+	reverseArray(longAddress, reverseLongAddress, 8);
+	
 	//we grab the destination address for the mac frame
 	//byte destinationAddress[8];
 	//memcpy(destinationAddress, frame+5, 8);
