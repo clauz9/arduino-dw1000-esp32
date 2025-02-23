@@ -31,7 +31,7 @@
 #define PAN_ID_2 0xDE
 
 #define SHORT_MAC_LEN 9
-#define LONG_MAC_LEN 15
+#define LONG_MAC_LEN 23
 
 
 #ifndef _DW1000MAC_H_INCLUDED
