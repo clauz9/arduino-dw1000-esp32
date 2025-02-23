@@ -471,9 +471,10 @@ void DW1000RangingClass::loop() {
 			_expectedMsgId = POLL;
 		}
 		else if(messageType == RANGING_INIT && _type == TAG) {
-			
+
+			byte longAddress[8];
 			byte address[2];
-			_globalMac.decodeLongMACFrame(data, address);
+			_globalMac.decodeLongMACFrame(data, address, longAddress);
 			//we crate a new device with the anchor
 			DW1000Device myAnchor(address, true);
 			
@@ -782,7 +783,7 @@ void DW1000RangingClass::transmitBlink() {
 void DW1000RangingClass::transmitRangingInit(DW1000Device* myDistantDevice) {
 	transmitInit();
 	//we generate the mac frame for a ranging init message
-	_globalMac.generateLongMACFrame(data, _currentShortAddress, myDistantDevice->getByteAddress());
+	_globalMac.generateLongMACFrame(data, _currentShortAddress, _currentAddress, myDistantDevice->getByteAddress());
 	//we define the function code
 	data[LONG_MAC_LEN] = RANGING_INIT;
 	
