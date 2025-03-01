@@ -60,6 +60,7 @@ void DW1000Mac::generateBlinkFrame(byte frame[], byte sourceAddress[], byte sour
 //2 bytes for Desination Address and 2 bytes for Source Address
 //total=9 bytes
 void DW1000Mac::generateShortMACFrame(byte frame[], byte sourceShortAddress[], byte destinationShortAddress[]) {
+	memset(frame, 0, LEN_DATA); // Reset the data
 	//Frame controle
 	*frame     = FC_1;
 	*(frame+1) = FC_2_SHORT;
